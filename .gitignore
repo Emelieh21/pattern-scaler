@@ -1,0 +1,53 @@
+# Ignore the virtual environment directory created by Poetry
+__pypackages__/ 
+
+# Ignore the Poetry-generated files
+poetry.lock
+pyproject.toml
+
+# Ignore the build/ and dist/ directories for source distribution
+build/
+dist/
+
+# Ignore local development settings (e.g., if you're using VSCode)
+.vscode/
+
+# Ignore any Python cache files
+__pycache__/
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Python log files
+*.log
+
+# Ignore user-specific configuration files
+*.config
+
+# Ignore test reports
+coverage.xml
+
+# Ignore pycodestyle and flake8 cache directories
+.pytest_cache/
+__pycache__/
+
+# Ignore any compiled Python files (e.g., .pyc files)
+*.pyc
+*.pyo
+
+# Ignore local database files
+*.sqlite3
+
+# Ignore any environment-specific variables or secrets
+.env
+.env.local
+.env.*.local
+.env.*.example
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
