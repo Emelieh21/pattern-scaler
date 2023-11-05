@@ -1,6 +1,6 @@
 # Pattern Scaler
 
-### How to use
+## How to use
 
 Install poetry:
 
@@ -20,7 +20,18 @@ Run the main python script, open the terminal in the `src` folder and run:
 poetry run python main.py
 ```
 
-### Repo creation (to remove later)
+## TODO's
+
+* Clean up script, make functions
+* Add information of how to work with `input_file`, `desired_height` or `scale_factor` parameters
+* Explain the little 1 cm square somwhere
+* Add a photo of the first successfully scaled & sewed project
+* Add border lines to output A4s with identifiers (e.g A, B, C, ...) otherwise larger patterns are impossible to puzzle back together!
+* Make either some kind of command to run with system arguments or a small UI to make this more usuable
+
+## Extra's (to remove later)
+
+### Repo creation
 
 Initialized poetry repo with:
 
