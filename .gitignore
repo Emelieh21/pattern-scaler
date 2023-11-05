@@ -3,7 +3,6 @@ __pypackages__/
 
 # Ignore the Poetry-generated files
 poetry.lock
-pyproject.toml
 
 # Ignore the build/ and dist/ directories for source distribution
 build/

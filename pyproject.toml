@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pattern-scaler"
+version = "0.1.0"
+description = "A project to rescale sewing patterns and make them printable in A4 format"
+authors = ["Emelie Hofland <emelie_hofland@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pillow = "^10.1.0"
+opencv-python = "^4.8.1.78"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
