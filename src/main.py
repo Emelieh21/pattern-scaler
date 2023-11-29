@@ -8,10 +8,10 @@ import string
 
 inch = 2.54
 file_folder = "files/"
-input_file = "sweater-bottom.png"
+input_file = "bobby-sweater-bottom.png"
 file_name = input_file.replace(".png", "")
 desired_height = None
-scale_factor = 3 
+scale_factor = 3.907117647058823
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
