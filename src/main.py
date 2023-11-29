@@ -2,16 +2,17 @@ import cv2
 from PIL import Image
 import math
 # TODO: use this code! to make 1*1 cm square and paste image with border!
-from PIL import Image, ImageDraw, ImageFont
-from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom
+from PIL import Image
+from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom, set_line_width
 import string
 
 inch = 2.54
 file_folder = "files/"
-input_file = "bobby-sweater-bottom.png"
+input_file = "sweater-top.png"
 file_name = input_file.replace(".png", "")
-desired_height = None
-scale_factor = 3.907117647058823
+desired_height = None #68.26263652527305
+scale_factor = 5.1
+line_width = 2
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
@@ -71,6 +72,9 @@ print(f"New size of image: {new_width/dpcm} by {new_height/dpcm} cm")
 
 # Resize the image to the new dimensions
 resized_image = cv2.resize(cropped_image, (new_width, new_height))
+
+if (line_width is not None): 
+    resized_image = set_line_width(resized_image, line_width)
 
 # Save or display the resized image
 cv2.imwrite(file_folder+"resized_image.png", resized_image)

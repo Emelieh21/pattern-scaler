@@ -1,4 +1,6 @@
-from PIL import ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
+import cv2
+import numpy as np
 
 def add_reference_box(a4_image_copy, dpcm):
     reference_offset = dpcm+15
@@ -93,3 +95,24 @@ def add_page_letters_bottom(a4_image_copy, dpcm, page_count, num_sections_x, let
             draw.text((a4_width_px_full/2, a4_height_px_full - (1.65*dpcm)), result[0], font = font, fill="black")
             draw.text((a4_width_px_full/2, a4_height_px_full - (0.90*dpcm), a4_height_px_full/2), result[1], font = font, fill="black")
     return(a4_image_copy)
+
+def set_line_width(resized_image, line_width):
+    # Load the image
+    image = resized_image
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Apply Canny edge detection
+    edges = cv2.Canny(gray, 50, 150)
+    # Find lines in the image using the HoughLinesP function for probabilistic Hough transform
+    lines = cv2.HoughLinesP(edges, 3, np.pi / 210, threshold=50, minLineLength=50, maxLineGap=100)
+    # Get the original image dimensions
+    height, width, _ = resized_image.shape
+    # Redraw the detected lines on blank image with whatever width we like
+    new_image = Image.new("RGB", (width, height), "white")
+    new_image = np.array(new_image)
+    # Draw the lines on the original image
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        # Draw the line on the image with a specific width (in this case, 2 pixels)
+        cv2.line(new_image, (x1, y1), (x2, y2), (0, 0, 0), line_width)
+    return(new_image)
