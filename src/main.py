@@ -2,19 +2,27 @@ import cv2
 from PIL import Image
 import math
 # TODO: use this code! to make 1*1 cm square and paste image with border!
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom
+import string
 
 inch = 2.54
-reference_offset = 100 # pixels of offset to add the little square centimeter
 file_folder = "files/"
-input_file = "sweater-top.png"
+input_file = "sweater-bottom.png"
+file_name = input_file.replace(".png", "")
 desired_height = None
-scale_factor = 2.17 #2.2497142857142856
+scale_factor = 3 
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
 # Get the image's DPI (Dots Per Inch)
-dpi = image.info.get('dpi')[0]
+dpi = image.info.get('dpi')
+if (dpi is None):
+    # Use a default
+    dpi = 72
+else:
+    dpi = dpi[0]
+
 # Get dots per cm
 dpcm = dpi/inch
 
@@ -49,6 +57,7 @@ height, width, _ = cropped_image.shape
 # Get current sizes in cm
 height_cm = height/dpcm
 width_cm = width/dpcm
+print(f"Current size of image: {width_cm} by {height_cm} cm")
 
 if (desired_height):
     # Calculate scale factor
@@ -58,6 +67,7 @@ if (desired_height):
 # Calculate the new dimensions
 new_height = int(height * scale_factor)
 new_width = int(width * scale_factor)
+print(f"New size of image: {new_width/dpcm} by {new_height/dpcm} cm")
 
 # Resize the image to the new dimensions
 resized_image = cv2.resize(cropped_image, (new_width, new_height))
@@ -82,16 +92,15 @@ a4_height_px = a4_height_px_full - 2*dpcm # take out 1 cm for the border
 num_sections_x = math.ceil(large_image.width / a4_width_px)
 num_sections_y = math.ceil(large_image.height / a4_height_px)
 
-# Create a new image with a white background
-background_color = (255, 255, 255)  # RGB value for white
-a4_image = Image.new("RGB", (a4_width_px_full, a4_height_px_full), background_color)
-
-# Get the dimensions of the base image and the image to be pasted
-base_width, base_height = a4_image.size
+# Parameters for page creation
+page_count = 0
+total_pages = num_sections_x * num_sections_y
+letters = list(string.ascii_uppercase)[0:total_pages]
 
 # Loop to split the large image into A4-sized sections
 for row in range(num_sections_y):
     for col in range(num_sections_x):
+        page_count += 1
         x1 = col * a4_width_px
         y1 = row * a4_height_px
         x2 = x1 + a4_width_px
@@ -102,19 +111,22 @@ for row in range(num_sections_y):
             y2 = new_height
         section = large_image.crop((x1, y1, x2, y2))
         # Paste this section on an intermediate white background
-        white_background = Image.new("RGB", (round(a4_width_px), round(a4_height_px)), background_color)
+        white_background = Image.new("RGB", (round(a4_width_px), round(a4_height_px)), "white")
         white_background.paste(section)
         paste_width, paste_height = white_background.size
         # Calculate the coordinates to paste the image in the center
-        x_center = (base_width - paste_width) // 2
-        y_center = (base_height - paste_height) // 2
-        a4_image_copy = a4_image
+        x_center = (a4_width_px_full - paste_width) // 2
+        y_center = (a4_height_px_full - paste_height) // 2
+        a4_image_copy = Image.new("RGB", (a4_width_px_full, a4_height_px_full), "white")
         a4_image_copy.paste(white_background, (x_center, y_center))
         # Add a square centimeter box
-        # Create a drawing context
-        draw = ImageDraw.Draw(a4_image_copy)
-        rectangle_color = (211, 211, 211)  # RGB value for light grey
-        rectangle_coordinates = (reference_offset, reference_offset, reference_offset+dpcm, reference_offset+dpcm)
-        draw.rectangle(rectangle_coordinates, fill=rectangle_color)
+        add_reference_box(a4_image_copy, dpcm)
+        # Add lines to the sides
+        add_lines(a4_image_copy, a4_width_px_full, a4_height_px_full, dpcm)
+        # Add letters to the left line
+        add_page_letters_left(a4_image_copy, dpcm, page_count, row, num_sections_x, letters, a4_height_px_full)
+        add_page_letters_right(a4_image_copy, dpcm, page_count, row, num_sections_x, letters, a4_height_px_full, a4_width_px_full)
+        add_page_letters_top(a4_image_copy, dpcm, page_count, num_sections_x, letters, a4_width_px_full)
+        add_page_letters_bottom(a4_image_copy, dpcm, page_count, num_sections_x, letters, a4_height_px_full, a4_width_px_full)
         # Save or process the A4-sized section here
-        a4_image_copy.save(f"{file_folder}section_{row}_{col}.png")
+        a4_image_copy.save(f"{file_folder}{file_name}_section_{row}_{col}.png")
