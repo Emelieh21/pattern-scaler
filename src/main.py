@@ -3,15 +3,17 @@ from PIL import Image
 import math
 # TODO: use this code! to make 1*1 cm square and paste image with border!
 from PIL import Image
-from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom, set_line_width
+from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom, set_line_width, set_scale_factors
 import string
 
 inch = 2.54
 file_folder = "files/"
-input_file = "sweater-top.png"
+input_file = "sweater-bottom.png"
 file_name = input_file.replace(".png", "")
-desired_height = None #68.26263652527305
-scale_factor = 5.1
+desired_height = None
+desired_width = None
+scale_factor_height = 5
+scale_factor_width = 4
 line_width = 2
 
 # Get the dpi
@@ -60,14 +62,15 @@ height_cm = height/dpcm
 width_cm = width/dpcm
 print(f"Current size of image: {width_cm} by {height_cm} cm")
 
-if (desired_height):
-    # Calculate scale factor
-    scale_factor = desired_height/height_cm
-    print(f"Scale factor: {scale_factor}")
+scale_factor_height, scale_factor_width = set_scale_factors(height_cm, width_cm, 
+                                                            desired_height, 
+                                                            desired_width, 
+                                                            scale_factor_height, 
+                                                            scale_factor_width)
 
 # Calculate the new dimensions
-new_height = int(height * scale_factor)
-new_width = int(width * scale_factor)
+new_height = int(height * scale_factor_height)
+new_width = int(width * scale_factor_width)
 print(f"New size of image: {new_width/dpcm} by {new_height/dpcm} cm")
 
 # Resize the image to the new dimensions

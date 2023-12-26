@@ -116,3 +116,29 @@ def set_line_width(resized_image, line_width):
         # Draw the line on the image with a specific width (in this case, 2 pixels)
         cv2.line(new_image, (x1, y1), (x2, y2), (0, 0, 0), line_width)
     return(new_image)
+
+def set_scale_factors(height_cm, width_cm, 
+                    desired_height, 
+                    desired_width, 
+                    scale_factor_height, 
+                    scale_factor_width):
+    if (desired_height):
+        # Calculate scale factor
+        scale_factor_height = desired_height/height_cm
+        print(f"Scale factor height: {scale_factor_height}")
+
+    if (desired_width):
+        # Calculate scale factor
+        scale_factor_width = desired_width/width_cm
+        print(f"Scale factor width: {scale_factor_width}")
+
+    if (not any(x is not None for x in [scale_factor_height, scale_factor_width])):
+        raise Exception("scale_factor_height and scale_factor_width can not both be None. Please set at least one of the two.")
+
+    if (scale_factor_height is None):
+        scale_factor_height = scale_factor_width
+
+    if (scale_factor_width is None):
+        scale_factor_width = scale_factor_height
+
+    return scale_factor_height, scale_factor_width
