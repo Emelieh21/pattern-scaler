@@ -50,3 +50,6 @@ __pycache__/
 
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# Keep local folder for files I do not want to push
+local
