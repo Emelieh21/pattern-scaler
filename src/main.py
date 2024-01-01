@@ -5,16 +5,26 @@ import math
 from PIL import Image
 from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom, set_line_width, set_scale_factors
 import string
+# TODO: refactor
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 inch = 2.54
 file_folder = "files/"
-input_file = "sweater-bottom.png"
+input_file = "painting.png"
 file_name = input_file.replace(".png", "")
-desired_height = None
-desired_width = None
-scale_factor_height = 5
-scale_factor_width = 4
+desired_height = 38
+desired_width = 48
+scale_factor_height = None
+scale_factor_width = None
 line_width = 2
+
+# TODO: this does not work yet, had issues with poppler, but did not feel like messing around with brew
+## Convert pdf of scan to png
+# from pdf2image import convert_from_path
+#print("Converting pdf to png...")
+#img_from_pdf = convert_from_path("painting-scan.pdf", poppler_path=r"/usr/local/opt/poppler")
+#img_from_pdf.save(input_file, "PNG")
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
@@ -104,6 +114,10 @@ page_count = 0
 total_pages = num_sections_x * num_sections_y
 letters = list(string.ascii_uppercase)[0:total_pages]
 
+# TODO: refactor
+# Store all resulting images in one pdf
+pdf = canvas.Canvas(file_folder+"result.pdf", pagesize=letter)
+
 # Loop to split the large image into A4-sized sections
 for row in range(num_sections_y):
     for col in range(num_sections_x):
@@ -136,4 +150,17 @@ for row in range(num_sections_y):
         add_page_letters_top(a4_image_copy, dpcm, page_count, num_sections_x, letters, a4_width_px_full)
         add_page_letters_bottom(a4_image_copy, dpcm, page_count, num_sections_x, letters, a4_height_px_full, a4_width_px_full)
         # Save or process the A4-sized section here
-        a4_image_copy.save(f"{file_folder}{file_name}_section_{row}_{col}.png")
+        section_file_name = f"{file_folder}{file_name}_section_{row}_{col}.png"
+        a4_image_copy.save(section_file_name)
+        
+        # TODO: refactor, make function to do this
+        # Set the size of the PDF page to match the image size
+        pdf.setPageSize((a4_image_copy.width, a4_image_copy.height))
+        # Draw the PNG image on the PDF
+        pdf.drawInlineImage(section_file_name, 0, 0, width=a4_image_copy.width, height=a4_image_copy.height)
+        # Add a new page for the next image (optional)
+        pdf.showPage()
+
+# TODO: refactor
+# Save the PDF file
+pdf.save()
