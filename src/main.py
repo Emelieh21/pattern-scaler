@@ -1,30 +1,38 @@
 import cv2
 from PIL import Image
 import math
-# TODO: use this code! to make 1*1 cm square and paste image with border!
-from PIL import Image
-from utils.functions import add_lines, add_reference_box, add_page_letters_left, add_page_letters_right, add_page_letters_top, add_page_letters_bottom, set_line_width, set_scale_factors
 import string
-# TODO: refactor
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
+from utils.functions import (
+    add_lines, 
+    add_reference_box, 
+    add_page_letters_left, 
+    add_page_letters_right, 
+    add_page_letters_top, 
+    add_page_letters_bottom, 
+    set_line_width, 
+    set_scale_factors,
+    convert_pdf_to_bw_png,
+)
+
 inch = 2.54
 file_folder = "files/"
-input_file = "painting.png"
+input_file = "sweater-from-pdf.png"
+pdf_path = "sweater.pdf"
+convert = True
 file_name = input_file.replace(".png", "")
 desired_height = 38
-desired_width = 48
+desired_width = None # 48 
 scale_factor_height = None
 scale_factor_width = None
 line_width = 2
 
-# TODO: this does not work yet, had issues with poppler, but did not feel like messing around with brew
 ## Convert pdf of scan to png
-# from pdf2image import convert_from_path
-#print("Converting pdf to png...")
-#img_from_pdf = convert_from_path("painting-scan.pdf", poppler_path=r"/usr/local/opt/poppler")
-#img_from_pdf.save(input_file, "PNG")
+if (convert):
+ print("Converting pdf to png...")
+ convert_pdf_to_bw_png(pdf_path, input_file)
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
@@ -32,9 +40,11 @@ image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your
 dpi = image.info.get('dpi')
 if (dpi is None):
     # Use a default
+    print("Using default dpi")
     dpi = 72
 else:
     dpi = dpi[0]
+print(dpi)
 
 # Get dots per cm
 dpcm = dpi/inch

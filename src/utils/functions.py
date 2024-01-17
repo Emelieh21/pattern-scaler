@@ -1,6 +1,15 @@
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
+import fitz  # PyMuPDF
+
+def convert_pdf_to_bw_png(input_pdf, output_png, resolution=200):
+    pdf_document = fitz.open(input_pdf)
+    page = pdf_document[0]  # Get the first page
+
+    # Convert to grayscale
+    pixmap = page.get_pixmap(matrix=fitz.Matrix(resolution/72, resolution/72))
+    pixmap.save(output_png)
 
 def add_reference_box(a4_image_copy, dpcm):
     reference_offset = dpcm+15
