@@ -15,24 +15,32 @@ from utils.functions import (
     set_line_width, 
     set_scale_factors,
     convert_pdf_to_bw_png,
+    is_pdf_file,
 )
 
-inch = 2.54
-file_folder = "files/"
-input_file = "sweater-from-pdf.png"
-pdf_path = "sweater.pdf"
-convert = True
-file_name = input_file.replace(".png", "")
-desired_height = 38
-desired_width = None # 48 
+# User inputs
+input_file = "sweater-top.png"
+desired_height = 43
+desired_width = None  
 scale_factor_height = None
 scale_factor_width = None
+pdf_resolution = 300
 line_width = 2
 
-## Convert pdf of scan to png
-if (convert):
- print("Converting pdf to png...")
- convert_pdf_to_bw_png(pdf_path, input_file)
+# Fine tuning parameters
+inch = 2.54
+file_folder = "output-files/"
+
+# Conversion parameters
+if (is_pdf_file(input_file)):
+    ## Convert pdf of scan to png
+    print("Converting pdf to png...")
+    pdf_input_file = input_file
+    input_file = input_file.lower().replace(".pdf", ".png")
+    convert_pdf_to_bw_png(pdf_input_file, input_file, pdf_resolution)
+
+# We need a filename to use later for storing
+file_name = input_file.replace(".png", "")
 
 # Get the dpi
 image = Image.open(input_file)  # Replace 'your_image.jpg' with the path to your image file
@@ -171,6 +179,5 @@ for row in range(num_sections_y):
         # Add a new page for the next image (optional)
         pdf.showPage()
 
-# TODO: refactor
 # Save the PDF file
 pdf.save()

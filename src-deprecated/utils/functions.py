@@ -2,8 +2,13 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 import fitz  # PyMuPDF
+import os
 
-def convert_pdf_to_bw_png(input_pdf, output_png, resolution=200):
+def is_pdf_file(file_path):
+    _, file_extension = os.path.splitext(file_path)
+    return file_extension.lower() == '.pdf'
+
+def convert_pdf_to_bw_png(input_pdf, output_png, resolution):
     pdf_document = fitz.open(input_pdf)
     page = pdf_document[0]  # Get the first page
 
