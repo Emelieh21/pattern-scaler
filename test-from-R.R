@@ -7,7 +7,7 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 url <- "http://localhost:8001/scale_pattern?desired_height=42&line_width=2"
 
 # Path to the PNG file
-file_path <- "src/test-inputs/sweater-bottom.png"
+file_path <- "sweater-top.png"
 
 # Create a POST request with the PNG file
 response <- POST(

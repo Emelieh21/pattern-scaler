@@ -14,10 +14,18 @@ Install the dependencies for the repository:
 poetry install
 ```
 
-Run the main python script, open the terminal in the `src` folder and run:
+## Run as API
+
+Launch the API with
 
 ```
-poetry run python main.py
+poetry run ./run.sh
+```
+
+You can make a post request to the API with an input file with the test-from-R.R script or do it with curl:
+
+```
+curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-top.png" "http://localhost:8001/scale_pattern?desired_height=42" -o result.pdf
 ```
 
 ## TODO's
