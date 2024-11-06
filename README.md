@@ -1,5 +1,8 @@
 # Pattern Scaler
 
+## Introduction
+Pattern Scaler is an API that can be used to scale a pattern to a certain size and store it as a PDF with the pattern on printable A4 format. 
+
 ## How to use
 
 Install poetry:
