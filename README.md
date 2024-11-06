@@ -22,60 +22,24 @@ Launch the API with
 poetry run ./run.sh
 ```
 
-You can make a post request to the API with an input file with the test-from-R.R script or do it with curl:
+You can make a post request to the API with an input file like this with curl:
 
 ```
-curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-top.png" "http://localhost:8001/scale_pattern?desired_height=42" -o result.pdf
+curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-top.png" "http://localhost:8001/scale_pattern?desired_height=46" -o result.pdf
 ```
 
-## TODO's
-
-* Clean up script, make functions
-* Add information of how to work with `input_file`, `desired_height` or `scale_factor` parameters
-* Explain what a input png could look like, show example
-* Explain the little 1 cm reference square somewhere
-* Add a photo of the first successfully scaled & sewed project
-* Add border lines to output A4s with identifiers (e.g A, B, C, ...) otherwise larger patterns are impossible to puzzle back together!
-* Make either some kind of command to run with system arguments or a small UI to make this more usuable
-
-## Extra's (to remove later)
-
-### Repo creation
-
-Initialized poetry repo with:
+In the logs of the API you can see the following information:
 
 ```
-poetry init
+Current size of image: 6.311912623825248 by 13.385826771653544 cm
+Scale factor height: 3.4364705882352937
+New size of image: 21.678943357886716 by 45.999491998984 cm
 ```
 
-The dependencies can be added with:
+With the scale factor height we can scale the bottom part of the pattern the same way by calling:
 
 ```
-poetry add opencv-python
-poetry add Pillow
+curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-bottom.png" "http://localhost:8001/scale_pattern?scale_factor_height=3.4364705882352937" -o result-bottom.pdf
 ```
 
-### Dependency issues I struggled with
-I struggled quite long with a cv2 import error that suddenly started happening. Also switching to poetry and using poetry's environment did not solve the issue. 
-
-First of all, adding opencv got stuck everytime I tried doing it with the `poetry add` command above. I managed to install it with the following:
-
-```
-poetry shell
-pip install --upgrade pip setuptools wheel
-pip install --no-use-pep517 opencv-python
-pip add opencv-python
-```
-
-However, I would still get the same ImportError, indicating an issue with `libffi` (which I already tried to uninstall and reinstall a few times):
-
-```
-Library not loaded: /usr/local/opt/libffi/lib/libffi.7.dylib
-```
-
-In the end what fixed it for me was a suggestion from this [post](https://github.com/pyenv/pyenv/issues/1721):
-
-```
-cd /usr/local/opt/libffi/lib
-ln -s libffi.8.dylib libffi.7.dylib
-```
+There always needs to be either a `desired_height` (or `desired_weight`) or a `scale_factor_height` (or `scale_factor_weight`) specified for the API call to work. 

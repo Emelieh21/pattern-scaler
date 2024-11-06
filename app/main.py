@@ -8,10 +8,10 @@ from app.utils.functions import scale_pattern
 app = FastAPI()
 
 @app.post("/scale_pattern")
-async def upload_file(desired_height: int = 43,
-                      desired_width: int = None,
-                      scale_factor_height: int = None,
-                      scale_factor_width: int = None,
+async def upload_file(desired_height: float = None,
+                      desired_width: float = None,
+                      scale_factor_height: float = None,
+                      scale_factor_width: float = None,
                       line_width: int = None,
                       pdf_resolution: int = 300,
                       file: UploadFile = File(...)):
