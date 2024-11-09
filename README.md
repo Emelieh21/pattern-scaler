@@ -38,7 +38,7 @@ Here you can click on **POST /scale_pattern** and then on **Try it out**. This a
 
 ![image](./app/assets/pattern-scaler-input-fastapi-docs.jpeg)
 
-If you click **Execute**. If the call is successful you can click "Download file" to download the file: 
+Click **Execute**. If the call is successful you can click "Download file" to download the file: 
 
 ![image](./app/assets/pattern-scaler-result-fastapi-docs.jpeg)
 
@@ -47,6 +47,8 @@ Alternatively you will find the generated result `result.pdf` in `./app/output-f
 > Note: for whatever reason, making the request from the Swagger UI twice in a row does not work me (it returns **Failed to fetch. Possible Reasons: - CORS, - ...**). To make it work I have to "choose file" again, select a different file and then revert back to the original file. Since this does not happen with curl I assume it is a Swagger UI related issue. If I find a solution for this behaviour I will make adjustments.
 
 ## Scaling other parts of the pattern
+
+If your pattern consists of multiple parts, you can scale them equally by using the scale factor logged by the API. 
 
 In the logs of the API you can see the following information when making a call:
 
