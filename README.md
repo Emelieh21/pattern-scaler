@@ -33,7 +33,7 @@ curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-top.png" "
 
 If successful, you can find the result.pdf in your project folder. 
 
-Alternatively, you can go to http://localhost:8001/docs to open the interactive Swagger UI documentation of the API.
+Alternatively, you can go to http://localhost:8001/docs to open the interactive Swagger UI documentation.
 Here you can click on **POST /scale_pattern** and then on **Try it out**. This allows to adjust the parameters and choose the PNG file with the image you want to scale from your local folder. 
 
 ![image](./app/assets/pattern-scaler-input-fastapi-docs.jpeg)
