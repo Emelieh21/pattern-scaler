@@ -22,7 +22,7 @@ poetry install
 Launch the API with
 
 ```
-poetry run ./run.sh
+poetry run uvicorn --reload --host localhost --port 8001 "app.main:app"
 ```
 
 You can make a post request to the API with an input file like this with curl:
