@@ -65,3 +65,7 @@ curl -X POST -H "Content-Type: multipart/form-data" -F "file=@sweater-bottom.png
 ```
 
 There always needs to be either a `desired_height` (or `desired_weight`) or a `scale_factor_height` (or `scale_factor_weight`) specified for the API call to work. 
+
+## Note on PDF inputs
+
+The pattern scaler works with PDF files as input, but I noticed the scale factor does not work correctly. Also, finding the correct resolution for a PDF is difficult (for my scanner it seems to be 304). This needs to be improved in the future.
